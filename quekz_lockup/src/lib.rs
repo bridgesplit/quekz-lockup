@@ -1,3 +1,5 @@
+//! program to lock up quekz to mint nobles
+
 use anchor_lang::prelude::*;
 
 pub mod errors;
@@ -15,29 +17,45 @@ pub mod quekz_lockup {
 
     use super::*;
 
-    /// whitelist mint
-    /// 
-    
-
     /// initialize nobles
-    
-    /// initialize noble vault
-    /// 
-    
-
-    /// deposit quek
-    /// 
-    
+    pub fn initialize_nobles(
+        ctx: Context<InitializeNobles>,
+        args: wen_new_standard::CreateGroupAccountArgs,
+        royalties: bool,
+    ) -> Result<()> {
+        instructions::nobles::initialize::handler(ctx, args, royalties)
+    }
 
     /// mint noble
-    /// 
-    
+    pub fn mint_noble(
+        ctx: Context<MintNoble>,
+        args: wen_new_standard::CreateMintAccountArgs,
+    ) -> Result<()> {
+        instructions::nobles::mint::handler(ctx, args)
+    }
+
+    /// deposit quekz
+    pub fn deposit_quekz(ctx: Context<DepositQuekz>) -> Result<()> {
+        instructions::quekz::deposit::handler(ctx)
+    }
+
+    /// withdraw noble
+    pub fn withdraw_quekz(ctx: Context<WithdrawQuekz>) -> Result<()> {
+        instructions::quekz::withdraw::handler(ctx)
+    }
+
+    /// initialize vault
+    pub fn initialize_vault(ctx: Context<InitializeVault>, nonce: Pubkey) -> Result<()> {
+        instructions::vault::initialize::handler(ctx, nonce)
+    }
 
     /// lock noble
-    
+    pub fn lock_noble(ctx: Context<LockVault>) -> Result<()> {
+        instructions::vault::lock::handler(ctx)
+    }
 
     /// unlock noble
-    /// 
-    
-    /// withdraw quek
+    pub fn unlock_noble(ctx: Context<UnlockVault>) -> Result<()> {
+        instructions::vault::unlock::handler(ctx)
+    }
 }

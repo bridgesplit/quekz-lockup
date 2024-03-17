@@ -7,11 +7,11 @@ use wen_new_standard::{
     CreateGroupAccountArgs,
 };
 
-use crate::MigrationAuthorityPda;
+use crate::NoblesAuthority;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct MigrateCollection<'info> {
+pub struct InitializeNobles<'info> {
     #[account(mut)]
     pub collection_authority: Signer<'info>,
     #[account(
@@ -21,7 +21,7 @@ pub struct MigrateCollection<'info> {
         seeds = [wns_group.key().as_ref()],
         bump,
     )]
-    pub migration_authority_pda: Box<Account<'info, MigrationAuthorityPda>>,
+    pub nobles_authority: Box<Account<'info, NoblesAuthority>>,
     /// CHECK: cpi checks
     #[account(mut)]
     pub wns_group: Signer<'info>,
@@ -40,7 +40,7 @@ pub struct MigrateCollection<'info> {
     pub wns_program: Program<'info, WenNewStandard>,
 }
 
-impl<'info> MigrateCollection<'info> {
+impl<'info> InitializeNobles<'info> {
     fn create_wns_collection(
         &self,
         args: CreateGroupAccountArgs,
@@ -48,7 +48,7 @@ impl<'info> MigrateCollection<'info> {
     ) -> Result<()> {
         let cpi_accounts = CreateGroupAccount {
             payer: self.collection_authority.to_account_info(),
-            authority: self.migration_authority_pda.to_account_info(),
+            authority: self.nobles_authority.to_account_info(),
             receiver: self.collection_authority.to_account_info(),
             group: self.wns_group.to_account_info(),
             mint: self.wns_group_mint.to_account_info(),
@@ -66,17 +66,17 @@ impl<'info> MigrateCollection<'info> {
 }
 
 pub fn handler(
-    ctx: Context<MigrateCollection>,
+    ctx: Context<InitializeNobles>,
     args: CreateGroupAccountArgs,
     royalties: bool,
 ) -> Result<()> {
-    ctx.accounts.migration_authority_pda.authority = ctx.accounts.collection_authority.key();
-    ctx.accounts.migration_authority_pda.wns_group = ctx.accounts.wns_group.key();
-    ctx.accounts.migration_authority_pda.royalties = royalties;
+    ctx.accounts.nobles_authority.authority = ctx.accounts.collection_authority.key();
+    ctx.accounts.nobles_authority.group = ctx.accounts.wns_group.key();
+    ctx.accounts.nobles_authority.royalties = royalties;
     let wns_group = ctx.accounts.wns_group.key();
     let signer_seeds = [
         wns_group.as_ref(),
-        &get_bump_in_seed_form(&ctx.bumps.migration_authority_pda),
+        &get_bump_in_seed_form(&ctx.bumps.nobles_authority),
     ];
     ctx.accounts
         .create_wns_collection(args, &[&signer_seeds[..]])?;

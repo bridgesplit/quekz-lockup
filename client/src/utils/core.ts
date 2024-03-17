@@ -3,9 +3,9 @@ import {
 	utils,
 } from '@coral-xyz/anchor';
 import {Connection, PublicKey} from '@solana/web3.js';
-import {wnsProgramId, tokenProgramId} from './constants';
+import {wnsProgramId, tokenProgramId, lockupProgramId} from './constants';
 import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
-import {type WenMigration, migrationIdl} from '../program';
+import {type QuekzLockup, quekzLockupIdl} from '../program';
 
 export const getProvider = () => {
 	const connection = new Connection(process.env.RPC_URL ?? 'https://api.devnet.solana.com');
@@ -14,11 +14,11 @@ export const getProvider = () => {
 	return provider;
 };
 
-export const getMigrationProgram = (provider: Provider) => new Program(
-	migrationIdl as Idl,
+export const getLockupProgram = (provider: Provider) => new Program(
+	quekzLockupIdl as Idl,
 	wnsProgramId,
 	provider,
-) as unknown as Program<WenMigration>;
+) as unknown as Program<QuekzLockup>;
 
 export const getProgramAddress = (seeds: Uint8Array[], programId: PublicKey) => {
 	const [key] = PublicKey.findProgramAddressSync(seeds, programId);
@@ -36,17 +36,16 @@ export const getAtaAddress = (mint: string, owner: string): PublicKey => getProg
 	ASSOCIATED_TOKEN_PROGRAM_ID,
 );
 
-export const getMigrationAuthorityPda = (group: string) => {
-	const [migrationAuthority] = PublicKey.findProgramAddressSync([new PublicKey(group).toBuffer()], wnsProgramId);
+export const getNoblesAuthority = (group: string) => {
+	const [noblesAuthority] = PublicKey.findProgramAddressSync([new PublicKey(group).toBuffer()], lockupProgramId);
 
-	return migrationAuthority;
+	return noblesAuthority;
 };
 
-export const getWhitelistMintPda = (mint: string, group: string) => {
-	const migrationAuthority = getMigrationAuthorityPda(group);
-	const [migrationMint] = PublicKey.findProgramAddressSync([new PublicKey(mint).toBuffer(), migrationAuthority.toBuffer()], wnsProgramId);
+export const getNoblesVault = (nonce: string) => {
+	const [noblesAuthority] = PublicKey.findProgramAddressSync([new PublicKey(nonce).toBuffer()], lockupProgramId);
 
-	return migrationMint;
+	return noblesAuthority;
 };
 
 export const getManagerAccountPda = () => {
