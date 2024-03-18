@@ -1,7 +1,7 @@
-import migrationIdl from './wen_migration.json';
-import {type WenMigration} from './wen_migration';
+import quekzLockupIdl from './quekz_lockup.json';
+import {type QuekzLockup} from './quekz_lockup';
 
 export {
-	migrationIdl,
-	type WenMigration,
+	quekzLockupIdl,
+	type QuekzLockup,
 };

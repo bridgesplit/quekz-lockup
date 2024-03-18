@@ -1,7 +1,9 @@
 #![allow(ambiguous_glob_reexports)]
 
-pub mod collection;
-pub mod mint;
+pub mod nobles;
+pub mod quekz;
+pub mod vault;
 
-pub use collection::*;
-pub use mint::*;
+pub use nobles::*;
+pub use quekz::*;
+pub use vault::*;

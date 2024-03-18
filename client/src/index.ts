@@ -1,7 +1,3 @@
-import {type WenNewStandard} from './wen_new_standard';
-import {type WenRoyaltyDistribution} from './wen_royalty_distribution';
-
-export {
-	type WenRoyaltyDistribution,
-	type WenNewStandard,
-};
+export * from './instructions';
+export * from './utils';
+export * from './program';

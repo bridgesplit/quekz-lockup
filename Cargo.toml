@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "wen_migration",
+    "quekz_lockup",
 ]
 resolver = "2"
 
