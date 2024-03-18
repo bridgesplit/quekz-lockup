@@ -70,10 +70,6 @@ export type QuekzLockup = {
           "type": {
             "defined": "wen_new_standard::CreateGroupAccountArgs"
           }
-        },
-        {
-          "name": "royalties",
-          "type": "bool"
         }
       ]
     },
@@ -205,6 +201,22 @@ export type QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -213,6 +225,14 @@ export type QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -259,6 +279,22 @@ export type QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -267,6 +303,14 @@ export type QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -347,6 +391,22 @@ export type QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -355,6 +415,14 @@ export type QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -401,6 +469,22 @@ export type QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -409,6 +493,14 @@ export type QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -435,10 +527,6 @@ export type QuekzLockup = {
           {
             "name": "group",
             "type": "publicKey"
-          },
-          {
-            "name": "royalties",
-            "type": "bool"
           }
         ]
       }
@@ -585,10 +673,6 @@ export const IDL: QuekzLockup = {
           "type": {
             "defined": "wen_new_standard::CreateGroupAccountArgs"
           }
-        },
-        {
-          "name": "royalties",
-          "type": "bool"
         }
       ]
     },
@@ -720,6 +804,22 @@ export const IDL: QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -728,6 +828,14 @@ export const IDL: QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -774,6 +882,22 @@ export const IDL: QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -782,6 +906,14 @@ export const IDL: QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -862,6 +994,22 @@ export const IDL: QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -870,6 +1018,14 @@ export const IDL: QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -916,6 +1072,22 @@ export const IDL: QuekzLockup = {
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -924,6 +1096,14 @@ export const IDL: QuekzLockup = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -950,10 +1130,6 @@ export const IDL: QuekzLockup = {
           {
             "name": "group",
             "type": "publicKey"
-          },
-          {
-            "name": "royalties",
-            "type": "bool"
           }
         ]
       }

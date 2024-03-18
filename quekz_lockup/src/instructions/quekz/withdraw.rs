@@ -4,7 +4,11 @@ use anchor_spl::{
     token::{Mint, TokenAccount},
     token_2022::{transfer_checked, Token2022, TransferChecked},
 };
-use wen_new_standard::{get_bump_in_seed_form, TokenGroupMember};
+use solana_program::pubkey;
+use wen_new_standard::{
+    cpi::{accounts::ApproveTransfer, approve_transfer},
+    get_bump_in_seed_form, TokenGroupMember,
+};
 
 use crate::{NoblesVault, QUEKZ_GROUP};
 
@@ -46,12 +50,43 @@ pub struct WithdrawQuekz<'info> {
         associated_token::authority = nobles_vault,
     )]
     pub vault_quekz_ta: Account<'info, TokenAccount>,
+    /// CHECKS: cpi checks
+    #[account(mut)]
+    pub approve_account: UncheckedAccount<'info>,
+    /// CHECKS: cpi checks
+    #[account(mut)]
+    pub distribution_account: UncheckedAccount<'info>,
     pub token_program: Program<'info, Token2022>,
     pub system_program: Program<'info, System>,
+    #[account(
+        executable,
+        constraint = distribution_program.key() == pubkey!("wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM")
+    )]
+    /// CHECKS: cpi checks
+    pub distribution_program: UncheckedAccount<'info>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
 impl WithdrawQuekz<'_> {
+    fn approve_transfer(&self, signer_seeds: &[&[&[u8]]]) -> Result<()> {
+        let cpi_program = self.token_program.to_account_info();
+        let cpi_accounts = ApproveTransfer {
+            payer: self.owner.to_account_info(),
+            authority: self.nobles_vault.to_account_info(),
+            mint: self.quekz_mint.to_account_info(),
+            approve_account: self.approve_account.to_account_info(),
+            payment_mint: self.quekz_mint.to_account_info(), //  wont be used
+            distribution_token_account: self.quekz_mint.to_account_info(), // wont be used
+            authority_token_account: self.quekz_mint.to_account_info(), // wont be used
+            distribution_account: self.distribution_account.to_account_info(),
+            system_program: self.system_program.to_account_info(),
+            distribution_program: self.distribution_program.to_account_info(),
+            token_program: self.token_program.to_account_info(),
+            associated_token_program: self.associated_token_program.to_account_info(),
+        };
+        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+        approve_transfer(cpi_ctx, 0)
+    }
     fn transfer_quekz_to_owner(&self, amount: u64, signer_seeds: &[&[&[u8]]]) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
@@ -70,6 +105,7 @@ pub fn handler(ctx: Context<WithdrawQuekz>) -> Result<()> {
         ctx.accounts.nobles_vault.nonce.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.nobles_vault),
     ];
+    ctx.accounts.approve_transfer(&[&signer_seeds[..]])?;
     ctx.accounts
         .transfer_quekz_to_owner(1, &[&signer_seeds[..]])?;
     ctx.accounts.nobles_vault.quekz_deposited += 1;

@@ -70,10 +70,6 @@
           "type": {
             "defined": "wen_new_standard::CreateGroupAccountArgs"
           }
-        },
-        {
-          "name": "royalties",
-          "type": "bool"
         }
       ]
     },
@@ -205,6 +201,22 @@
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -213,6 +225,14 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -259,6 +279,22 @@
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -267,6 +303,14 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -347,6 +391,22 @@
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -355,6 +415,14 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -401,6 +469,22 @@
           "isSigner": false
         },
         {
+          "name": "approveAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
+          "name": "distributionAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -409,6 +493,14 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "distributionProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "CHECKS: cpi checks"
+          ]
         },
         {
           "name": "associatedTokenProgram",
@@ -435,10 +527,6 @@
           {
             "name": "group",
             "type": "publicKey"
-          },
-          {
-            "name": "royalties",
-            "type": "bool"
           }
         ]
       }

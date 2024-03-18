@@ -2,8 +2,11 @@ import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
 import {Keypair, SYSVAR_RENT_PUBKEY, SystemProgram} from '@solana/web3.js';
 import {type Provider} from '@coral-xyz/anchor';
 import {
-	getAtaAddress, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
+	distributionProgramId,
+	getApproveAccountPda,
+	getAtaAddress, getDistributionAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
 	getNoblesVault,
+	quekzGroup,
 	tokenProgramId,
 	wnsProgramId,
 } from '../utils';
@@ -30,6 +33,9 @@ export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdra
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
+			approveAccount: getApproveAccountPda(args.quekzMint),
+			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionProgram: distributionProgramId,
 		})
 		.signers([groupMint])
 		.instruction();
@@ -52,6 +58,9 @@ export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdr
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
+			approveAccount: getApproveAccountPda(args.quekzMint),
+			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionProgram: distributionProgramId,
 		})
 		.signers([groupMint])
 		.instruction();

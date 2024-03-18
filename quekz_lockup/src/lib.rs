@@ -21,9 +21,8 @@ pub mod quekz_lockup {
     pub fn initialize_nobles(
         ctx: Context<InitializeNobles>,
         args: wen_new_standard::CreateGroupAccountArgs,
-        royalties: bool,
     ) -> Result<()> {
-        instructions::nobles::initialize::handler(ctx, args, royalties)
+        instructions::nobles::initialize::handler(ctx, args)
     }
 
     /// mint noble

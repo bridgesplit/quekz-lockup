@@ -65,14 +65,9 @@ impl<'info> InitializeNobles<'info> {
     }
 }
 
-pub fn handler(
-    ctx: Context<InitializeNobles>,
-    args: CreateGroupAccountArgs,
-    royalties: bool,
-) -> Result<()> {
+pub fn handler(ctx: Context<InitializeNobles>, args: CreateGroupAccountArgs) -> Result<()> {
     ctx.accounts.nobles_authority.authority = ctx.accounts.collection_authority.key();
     ctx.accounts.nobles_authority.group = ctx.accounts.wns_group.key();
-    ctx.accounts.nobles_authority.royalties = royalties;
     let wns_group = ctx.accounts.wns_group.key();
     let signer_seeds = [
         wns_group.as_ref(),

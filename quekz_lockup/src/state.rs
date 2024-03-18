@@ -8,7 +8,6 @@ pub const QUEKZ_GROUP: Pubkey = pubkey!("dqci6TGXWGTki8DTQ1QcJ3qg4fPbxUzj6MwJBGj
 pub struct NoblesAuthority {
     pub authority: Pubkey,
     pub group: Pubkey,
-    pub royalties: bool,
 }
 
 pub const QUEKZ_DEPOSIT_LIMIT: u8 = 10;

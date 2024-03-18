@@ -2,7 +2,9 @@ import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
 import {Keypair, SystemProgram} from '@solana/web3.js';
 import {type Provider} from '@coral-xyz/anchor';
 import {
-	getAtaAddress, getLockupProgram, getMemberAccountPda, getNoblesAuthority,
+	distributionProgramId,
+	getApproveAccountPda,
+	getAtaAddress, getDistributionAccountPda, getLockupProgram, getMemberAccountPda, getNoblesAuthority,
 	getNoblesVault,
 	tokenProgramId,
 } from '../utils';
@@ -27,6 +29,7 @@ export type LockOrUnlockVaultArgs = {
 	noblesMint: string;
 	noblesVault: string;
 	owner: string;
+	noblesGroup: string;
 };
 
 export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultArgs) => {
@@ -44,6 +47,9 @@ export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultAr
 			noblesMint: args.noblesMint,
 			ownerNobleTa: getAtaAddress(args.noblesMint, args.owner),
 			vaultNobleTa: getAtaAddress(args.noblesMint, args.noblesVault),
+			approveAccount: getApproveAccountPda(args.noblesMint),
+			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
+			distributionProgram: distributionProgramId,
 		})
 		.instruction();
 	return ix;
@@ -64,6 +70,9 @@ export const getUnlockVault = async (provider: Provider, args: LockOrUnlockVault
 			noblesMint: args.noblesMint,
 			ownerNobleTa: getAtaAddress(args.noblesMint, args.owner),
 			vaultNobleTa: getAtaAddress(args.noblesMint, args.noblesVault),
+			approveAccount: getApproveAccountPda(args.noblesMint),
+			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
+			distributionProgram: distributionProgramId,
 		})
 		.instruction();
 	return ix;

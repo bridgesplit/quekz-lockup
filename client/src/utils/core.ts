@@ -3,7 +3,9 @@ import {
 	utils,
 } from '@coral-xyz/anchor';
 import {Connection, PublicKey} from '@solana/web3.js';
-import {wnsProgramId, tokenProgramId, lockupProgramId} from './constants';
+import {
+	wnsProgramId, tokenProgramId, lockupProgramId, distributionProgramId,
+} from './constants';
 import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
 import {type QuekzLockup, quekzLockupIdl} from '../program';
 
@@ -64,4 +66,16 @@ export const getExtraMetasAccountPda = (mint: string) => {
 	const [extraMetasAccount] = PublicKey.findProgramAddressSync([utils.bytes.utf8.encode('extra-account-metas'), new PublicKey(mint).toBuffer()], wnsProgramId);
 
 	return extraMetasAccount;
+};
+
+export const getApproveAccountPda = (mint: string) => {
+	const [approveAccount] = PublicKey.findProgramAddressSync([utils.bytes.utf8.encode('approve-account'), new PublicKey(mint).toBuffer()], wnsProgramId);
+
+	return approveAccount;
+};
+
+export const getDistributionAccountPda = (groupMint: string, paymentMint: string) => {
+	const [distributionAccount] = PublicKey.findProgramAddressSync([new PublicKey(groupMint).toBuffer(), new PublicKey(paymentMint).toBuffer()], distributionProgramId);
+
+	return distributionAccount;
 };

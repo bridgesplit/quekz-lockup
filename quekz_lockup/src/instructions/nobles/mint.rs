@@ -105,16 +105,14 @@ pub fn handler(ctx: Context<MintNoble>, args: CreateMintAccountArgs) -> Result<(
     // add wns nft to group
     ctx.accounts.add_wns_nft_member()?;
 
-    if ctx.accounts.nobles_authority.royalties {
-        // add wns nft royalties
-        ctx.accounts.add_wns_royalties(UpdateRoyaltiesArgs {
-            royalty_basis_points: 500,
-            creators: vec![CreatorWithShare {
-                address: Pubkey::default(),
-                share: 100,
-            }],
-        })?;
-    }
+    // add wns nft royalties
+    ctx.accounts.add_wns_royalties(UpdateRoyaltiesArgs {
+        royalty_basis_points: 500,
+        creators: vec![CreatorWithShare {
+            address: Pubkey::default(),
+            share: 100,
+        }],
+    })?;
 
     ctx.accounts.nobles_vault.owner = Pubkey::default();
     ctx.accounts.nobles_vault.nobles_mint = ctx.accounts.wns_nft_mint.key();

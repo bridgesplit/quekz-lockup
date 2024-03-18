@@ -13,7 +13,6 @@ export type CreateGroupArgs = {
 	symbol: string;
 	uri: string;
 	maxSize: number;
-	royalties: boolean;
 	collectionAuthority: string;
 };
 
@@ -28,7 +27,7 @@ export const getInitializeNobles = async (provider: Provider, args: CreateGroupA
 			symbol: args.symbol,
 			uri: args.uri,
 			maxSize: args.maxSize,
-		}, args.royalties)
+		})
 		.accountsStrict({
 			systemProgram: SystemProgram.programId,
 			rent: SYSVAR_RENT_PUBKEY,
