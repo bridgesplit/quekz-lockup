@@ -1,0 +1,15 @@
+import { AnchorProvider, Program, type Provider } from '@coral-xyz/anchor';
+import { PublicKey } from '@solana/web3.js';
+import { type QuekzLockup } from '../program';
+export declare const getProvider: () => AnchorProvider;
+export declare const getLockupProgram: (provider: Provider) => Program<QuekzLockup>;
+export declare const getProgramAddress: (seeds: Uint8Array[], programId: PublicKey) => PublicKey;
+export declare const getGroupAccountPda: (mint: string) => PublicKey;
+export declare const getAtaAddress: (mint: string, owner: string) => PublicKey;
+export declare const getNoblesAuthority: (group: string) => PublicKey;
+export declare const getNoblesVault: (nonce: string) => PublicKey;
+export declare const getManagerAccountPda: () => PublicKey;
+export declare const getMemberAccountPda: (mint: string) => PublicKey;
+export declare const getExtraMetasAccountPda: (mint: string) => PublicKey;
+export declare const getApproveAccountPda: (mint: string) => PublicKey;
+export declare const getDistributionAccountPda: (groupMint: string, paymentMint: string) => PublicKey;

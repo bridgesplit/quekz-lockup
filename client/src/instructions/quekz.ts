@@ -47,6 +47,7 @@ export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdra
 export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
 	const quekzMember = getMemberAccountPda(args.quekzMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.withdrawQuekz()
 		.accountsStrict({
@@ -59,6 +60,7 @@ export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdr
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
+			extraMetasAccount,
 			approveAccount: getApproveAccountPda(args.quekzMint),
 			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroupMint.toString()),
 			distributionProgram: distributionProgramId,

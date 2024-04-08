@@ -2,7 +2,8 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{Mint, TokenAccount},
-    token_2022::{spl_token_2022, Token2022},
+    token_2022::Token2022,
+    token_interface::TransferChecked
 };
 use solana_program::pubkey;
 use wen_new_standard::{
@@ -12,7 +13,7 @@ use wen_new_standard::{
     TokenGroupMember,
 };
 
-use crate::{NoblesVault, QUEKZ_GROUP};
+use crate::{wns_transfer_checked, NoblesVault, QUEKZ_GROUP};
 
 #[derive(Accounts)]
 #[instruction()]
@@ -95,33 +96,25 @@ impl WithdrawQuekz<'_> {
     }
 
     fn transfer_quekz_to_owner(&self, signer_seeds: &[&[&[u8]]]) -> Result<()> {
-        let mut ix = spl_token_2022::instruction::transfer_checked(
-            &self.token_program.key.key(),
-            &self.vault_quekz_ta.key(),
-            &self.quekz_mint.key(),
-            &self.owner_quekz_ta.key(),
-            &self.nobles_vault.key(),
-            &[],
-            1, // amount = 1
-            0, // 0 decimals
-        )?;
-        ix.accounts.push(AccountMeta::new_readonly(
-            self.extra_metas_account.key(),
-            false,
-        ));
-        ix.accounts
-            .push(AccountMeta::new_readonly(self.wns_program.key(), false));
-        solana_program::program::invoke_signed(
-            &ix,
-            &[
-                self.vault_quekz_ta.to_account_info(),
-                self.quekz_mint.to_account_info(),
-                self.owner_quekz_ta.to_account_info(),
-                self.nobles_vault.to_account_info(),
-            ],
-            signer_seeds,
+        let transfer_cpi = CpiContext::new_with_signer(
+            self.token_program.to_account_info(),
+            TransferChecked {
+                from: self.vault_quekz_ta.to_account_info(),
+                to: self.owner_quekz_ta.to_account_info(),
+                authority: self.nobles_vault.to_account_info(),
+                mint: self.quekz_mint.to_account_info(),
+            }, signer_seeds
+        );
+    
+        wns_transfer_checked(
+            transfer_cpi.with_remaining_accounts(vec![
+                self.wns_program.to_account_info(),
+                self.extra_metas_account.to_account_info(),
+                self.approve_account.to_account_info(),
+            ]),
+            1, // supply = 1
+            0, // decimals = 0
         )
-        .map_err(Into::into)
     }
 }
 

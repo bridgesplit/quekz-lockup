@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{Mint, TokenAccount},
-    token_2022::{transfer_checked, Token2022, TransferChecked},
+    token_2022::{Token2022, TransferChecked},
 };
 use solana_program::pubkey;
 use wen_new_standard::{
@@ -11,7 +11,7 @@ use wen_new_standard::{
     TokenGroupMember,
 };
 
-use crate::{NoblesVault, QUEKZ_DEPOSIT_LIMIT};
+use crate::{wns_transfer_checked, NoblesVault, QUEKZ_DEPOSIT_LIMIT};
 
 #[derive(Accounts)]
 #[instruction()]
@@ -48,6 +48,9 @@ pub struct LockVault<'info> {
         associated_token::authority = owner,
     )]
     pub vault_noble_ta: Account<'info, TokenAccount>,
+    #[account(mut)]
+    /// CHECK: cpi checks
+    pub extra_metas_account: UncheckedAccount<'info>,
     /// CHECKS: cpi checks
     #[account(mut)]
     pub approve_account: UncheckedAccount<'info>,
@@ -88,15 +91,25 @@ impl LockVault<'_> {
     }
 
     fn transfer_nft_to_vault(&self) -> Result<()> {
-        let cpi_program = self.token_program.to_account_info();
-        let cpi_accounts = TransferChecked {
-            from: self.owner_noble_ta.to_account_info(),
-            mint: self.nobles_mint.to_account_info(),
-            to: self.vault_noble_ta.to_account_info(),
-            authority: self.owner.to_account_info(),
-        };
-        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
-        transfer_checked(cpi_ctx, 1, 0)
+        let transfer_cpi = CpiContext::new(
+            self.token_program.to_account_info(),
+            TransferChecked {
+                from: self.owner_noble_ta.to_account_info(),
+                to: self.vault_noble_ta.to_account_info(),
+                authority: self.owner.to_account_info(),
+                mint: self.nobles_mint.to_account_info(),
+            },
+        );
+    
+        wns_transfer_checked(
+            transfer_cpi.with_remaining_accounts(vec![
+                self.wns_program.to_account_info(),
+                self.extra_metas_account.to_account_info(),
+                self.approve_account.to_account_info(),
+            ]),
+            1, // supply = 1
+            0, // decimals = 0
+        )
     }
 }
 

@@ -1,8 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_2022::spl_token_2022,
-    token_interface::{Mint, Token2022, TokenAccount},
+    token_interface::{Mint, Token2022, TokenAccount, TransferChecked},
 };
 use solana_program::pubkey;
 use wen_new_standard::{
@@ -11,7 +10,7 @@ use wen_new_standard::{
     TokenGroupMember,
 };
 
-use crate::{NoblesVault, QUEKZ_DEPOSIT_LIMIT, QUEKZ_GROUP};
+use crate::{wns_transfer_checked, NoblesVault, QUEKZ_DEPOSIT_LIMIT, QUEKZ_GROUP};
 
 #[derive(Accounts)]
 #[instruction()]
@@ -92,33 +91,25 @@ impl DepositQuekz<'_> {
         approve_transfer(cpi_ctx, 0)
     }
     fn transfer_quekz_to_vault(&self) -> Result<()> {
-        let mut ix = spl_token_2022::instruction::transfer_checked(
-            &self.token_program.key.key(),
-            &self.owner_quekz_ta.key(),
-            &self.quekz_mint.key(),
-            &self.vault_quekz_ta.key(),
-            &self.owner.key(),
-            &[],
-            1, // amount = 1
-            0, // 0 decimals
-        )?;
-        ix.accounts.push(AccountMeta::new_readonly(
-            self.extra_metas_account.key(),
-            false,
-        ));
-        ix.accounts
-            .push(AccountMeta::new_readonly(self.wns_program.key(), false));
-        solana_program::program::invoke_signed(
-            &ix,
-            &[
-                self.owner_quekz_ta.to_account_info(),
-                self.quekz_mint.to_account_info(),
-                self.vault_quekz_ta.to_account_info(),
-                self.owner.to_account_info(),
-            ],
-            &[],
+        let transfer_cpi = CpiContext::new(
+            self.token_program.to_account_info(),
+            TransferChecked {
+                from: self.owner_quekz_ta.to_account_info(),
+                to: self.vault_quekz_ta.to_account_info(),
+                authority: self.owner.to_account_info(),
+                mint: self.quekz_mint.to_account_info(),
+            },
+        );
+    
+        wns_transfer_checked(
+            transfer_cpi.with_remaining_accounts(vec![
+                self.wns_program.to_account_info(),
+                self.extra_metas_account.to_account_info(),
+                self.approve_account.to_account_info(),
+            ]),
+            1, // supply = 1
+            0, // decimals = 0
         )
-        .map_err(Into::into)
     }
 }
 

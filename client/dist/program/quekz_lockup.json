@@ -1,0 +1,763 @@
+{
+    "address": "quekrjyc8AmUPcXRsgyuyBhe8d4ncDKsg8DZJWYjHRt",
+    "metadata": {
+        "name": "quekz_lockup",
+        "version": "0.0.1-alpha",
+        "spec": "0.1.0",
+        "description": "Program for migrating from metaplex to WNS"
+    },
+    "instructions": [
+        {
+            "name": "deposit_quekz",
+            "docs": [
+                "deposit quekz"
+            ],
+            "discriminator": [
+                222,
+                134,
+                71,
+                102,
+                76,
+                191,
+                72,
+                204
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true
+                },
+                {
+                    "name": "quekz_member"
+                },
+                {
+                    "name": "quekz_mint"
+                },
+                {
+                    "name": "owner_quekz_ta",
+                    "writable": true
+                },
+                {
+                    "name": "vault_quekz_ta",
+                    "writable": true
+                },
+                {
+                    "name": "extra_metas_account",
+                    "writable": true
+                },
+                {
+                    "name": "approve_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "distribution_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "distribution_program"
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "initialize_nobles",
+            "docs": [
+                "initialize nobles"
+            ],
+            "discriminator": [
+                35,
+                99,
+                120,
+                121,
+                62,
+                70,
+                218,
+                250
+            ],
+            "accounts": [
+                {
+                    "name": "collection_authority",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_authority",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "wns_group"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "wns_group",
+                    "writable": true
+                },
+                {
+                    "name": "wns_group_mint",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "wns_group_mint_token_account",
+                    "writable": true
+                },
+                {
+                    "name": "wns_manager"
+                },
+                {
+                    "name": "rent",
+                    "address": "SysvarRent111111111111111111111111111111111"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                }
+            ],
+            "args": [
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "symbol",
+                    "type": "string"
+                },
+                {
+                    "name": "uri",
+                    "type": "string"
+                },
+                {
+                    "name": "max_size",
+                    "type": "u32"
+                }
+            ]
+        },
+        {
+            "name": "initialize_vault",
+            "docs": [
+                "initialize vault"
+            ],
+            "discriminator": [
+                48,
+                191,
+                163,
+                44,
+                71,
+                129,
+                63,
+                164
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_authority",
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "wns_group"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "arg",
+                                "path": "nonce"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "wns_group"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "nonce",
+                    "type": "pubkey"
+                }
+            ]
+        },
+        {
+            "name": "lock_noble",
+            "docs": [
+                "lock noble"
+            ],
+            "discriminator": [
+                58,
+                214,
+                232,
+                21,
+                201,
+                182,
+                231,
+                229
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true
+                },
+                {
+                    "name": "member"
+                },
+                {
+                    "name": "nobles_mint"
+                },
+                {
+                    "name": "owner_noble_ta",
+                    "writable": true
+                },
+                {
+                    "name": "vault_noble_ta",
+                    "writable": true
+                },
+                {
+                    "name": "extra_metas_account",
+                    "writable": true
+                },
+                {
+                    "name": "approve_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "distribution_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "distribution_program"
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "mint_noble",
+            "docs": [
+                "mint noble"
+            ],
+            "discriminator": [
+                34,
+                8,
+                245,
+                192,
+                6,
+                171,
+                166,
+                69
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_authority",
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "wns_group"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "nobles_vault.nonce",
+                                "account": "NoblesVault"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "wns_manager"
+                },
+                {
+                    "name": "wns_group"
+                },
+                {
+                    "name": "wns_nft_mint",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "wns_nft_token",
+                    "writable": true
+                },
+                {
+                    "name": "wns_nft_member_account",
+                    "writable": true
+                },
+                {
+                    "name": "extra_metas_account",
+                    "writable": true
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                },
+                {
+                    "name": "rent",
+                    "address": "SysvarRent111111111111111111111111111111111"
+                },
+                {
+                    "name": "token_program_2022",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                }
+            ],
+            "args": [
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "symbol",
+                    "type": "string"
+                },
+                {
+                    "name": "uri",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "unlock_noble",
+            "docs": [
+                "unlock noble"
+            ],
+            "discriminator": [
+                84,
+                0,
+                234,
+                236,
+                84,
+                204,
+                106,
+                168
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "nobles_vault.nonce",
+                                "account": "NoblesVault"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "member"
+                },
+                {
+                    "name": "nobles_mint"
+                },
+                {
+                    "name": "owner_noble_ta",
+                    "writable": true
+                },
+                {
+                    "name": "vault_noble_ta",
+                    "writable": true
+                },
+                {
+                    "name": "extra_metas_account",
+                    "writable": true
+                },
+                {
+                    "name": "approve_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "distribution_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "distribution_program"
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "withdraw_quekz",
+            "docs": [
+                "withdraw noble"
+            ],
+            "discriminator": [
+                5,
+                76,
+                134,
+                214,
+                234,
+                114,
+                152,
+                5
+            ],
+            "accounts": [
+                {
+                    "name": "owner",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "nobles_vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "nobles_vault.nonce",
+                                "account": "NoblesVault"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "quekz_member"
+                },
+                {
+                    "name": "quekz_mint"
+                },
+                {
+                    "name": "owner_quekz_ta",
+                    "writable": true
+                },
+                {
+                    "name": "vault_quekz_ta",
+                    "writable": true
+                },
+                {
+                    "name": "extra_metas_account",
+                    "writable": true
+                },
+                {
+                    "name": "approve_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "distribution_account",
+                    "docs": [
+                        "CHECKS: cpi checks"
+                    ],
+                    "writable": true
+                },
+                {
+                    "name": "token_program",
+                    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "distribution_program"
+                },
+                {
+                    "name": "wns_program",
+                    "address": "wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                }
+            ],
+            "args": []
+        }
+    ],
+    "accounts": [
+        {
+            "name": "NoblesAuthority",
+            "discriminator": [
+                228,
+                65,
+                236,
+                195,
+                26,
+                242,
+                174,
+                150
+            ]
+        },
+        {
+            "name": "NoblesVault",
+            "discriminator": [
+                156,
+                244,
+                94,
+                229,
+                170,
+                56,
+                7,
+                179
+            ]
+        },
+        {
+            "name": "TokenGroupMember",
+            "discriminator": [
+                17,
+                208,
+                50,
+                173,
+                30,
+                127,
+                245,
+                94
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "InvalidGroupAuthority",
+            "msg": "Invalid Group Authority for collection account"
+        },
+        {
+            "code": 6001,
+            "name": "InvalidCreatorPctAmount",
+            "msg": "Invalid creator pct amount. Must add up to 100"
+        },
+        {
+            "code": 6002,
+            "name": "ArithmeticOverflow",
+            "msg": "Arithmetic overflow"
+        }
+    ],
+    "types": [
+        {
+            "name": "NoblesAuthority",
+            "docs": [
+                "empty struct representing nobles collection authority"
+            ],
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "group",
+                        "type": "pubkey"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "NoblesVault",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "nonce",
+                        "docs": [
+                            "nonce"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "owner",
+                        "docs": [
+                            "owner is going to be pubkey::default after the nobles is minted since anyone who ones the noble owns the vault"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "group",
+                        "docs": [
+                            "group account of the nobles"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "nobles_mint",
+                        "docs": [
+                            "nobles mint that is minted when the vault is filled. default is pubkey::default"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "quekz_deposited",
+                        "docs": [
+                            "number of quekz deposited in the vault"
+                        ],
+                        "type": "u8"
+                    },
+                    {
+                        "name": "is_locked",
+                        "docs": [
+                            "nobles is locked"
+                        ],
+                        "type": "bool"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TokenGroupMember",
+            "docs": [
+                "Data struct for a `TokenGroupMember`"
+            ],
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "mint",
+                        "docs": [
+                            "The associated mint, used to counter spoofing to be sure that member",
+                            "belongs to a particular mint"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "group",
+                        "docs": [
+                            "The pubkey of the `TokenGroup`"
+                        ],
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "member_number",
+                        "docs": [
+                            "The member number"
+                        ],
+                        "type": "u32"
+                    }
+                ]
+            }
+        }
+    ]
+}

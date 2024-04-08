@@ -4,7 +4,7 @@ import {type Provider} from '@coral-xyz/anchor';
 import {
 	distributionProgramId,
 	getApproveAccountPda,
-	getAtaAddress, getDistributionAccountPda, getLockupProgram, getMemberAccountPda, getNoblesAuthority,
+	getAtaAddress, getDistributionAccountPda, getExtraMetasAccountPda, getLockupProgram, getMemberAccountPda, getNoblesAuthority,
 	getNoblesVault,
 	tokenProgramId,
 	wnsProgramId,
@@ -37,6 +37,7 @@ export type LockOrUnlockVaultArgs = {
 export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultArgs) => {
 	const lockupProgram = getLockupProgram(provider);
 	const member = getMemberAccountPda(args.noblesMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.noblesMint);
 	const ix = await lockupProgram.methods
 		.unlockNoble()
 		.accountsStrict({
@@ -49,6 +50,7 @@ export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultAr
 			noblesMint: args.noblesMint,
 			ownerNobleTa: getAtaAddress(args.noblesMint, args.owner),
 			vaultNobleTa: getAtaAddress(args.noblesMint, args.noblesVault),
+			extraMetasAccount,
 			approveAccount: getApproveAccountPda(args.noblesMint),
 			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
 			distributionProgram: distributionProgramId,
@@ -61,6 +63,7 @@ export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultAr
 export const getUnlockVault = async (provider: Provider, args: LockOrUnlockVaultArgs) => {
 	const lockupProgram = getLockupProgram(provider);
 	const member = getMemberAccountPda(args.noblesMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.noblesMint);
 	const ix = await lockupProgram.methods
 		.unlockNoble()
 		.accountsStrict({
@@ -73,6 +76,7 @@ export const getUnlockVault = async (provider: Provider, args: LockOrUnlockVault
 			noblesMint: args.noblesMint,
 			ownerNobleTa: getAtaAddress(args.noblesMint, args.owner),
 			vaultNobleTa: getAtaAddress(args.noblesMint, args.noblesVault),
+			extraMetasAccount,
 			approveAccount: getApproveAccountPda(args.noblesMint),
 			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
 			distributionProgram: distributionProgramId,
