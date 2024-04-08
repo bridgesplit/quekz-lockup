@@ -95,7 +95,7 @@ impl WithdrawQuekz<'_> {
     }
 
     fn transfer_quekz_to_owner(&self, signer_seeds: &[&[&[u8]]]) -> Result<()> {
-        let ix = spl_token_2022::instruction::transfer_checked(
+        let mut ix = spl_token_2022::instruction::transfer_checked(
             &self.token_program.key.key(),
             &self.vault_quekz_ta.key(),
             &self.quekz_mint.key(),
@@ -105,6 +105,12 @@ impl WithdrawQuekz<'_> {
             1, // amount = 1
             0, // 0 decimals
         )?;
+        ix.accounts.push(AccountMeta::new_readonly(
+            self.extra_metas_account.key(),
+            false,
+        ));
+        ix.accounts
+            .push(AccountMeta::new_readonly(self.wns_program.key(), false));
         solana_program::program::invoke_signed(
             &ix,
             &[
