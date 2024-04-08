@@ -84,6 +84,7 @@ impl<'info> UnlockVault<'info> {
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         approve_transfer(cpi_ctx, 0)
     }
+
     fn transfer_nft_to_owner(
         &self,
         ra: Vec<AccountInfo<'info>>,
