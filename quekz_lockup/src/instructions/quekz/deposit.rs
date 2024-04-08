@@ -80,7 +80,7 @@ impl DepositQuekz<'_> {
             mint: self.quekz_mint.to_account_info(),
             approve_account: self.approve_account.to_account_info(),
             payment_mint: self.system_program.to_account_info(), //  wont be used
-            distribution_token_account: self.nobles_vault.to_account_info(), // wont be used
+            distribution_token_account: self.distribution_account.to_account_info(), // wont be used
             authority_token_account: self.owner.to_account_info(), // wont be used
             distribution_account: self.distribution_account.to_account_info(),
             system_program: self.system_program.to_account_info(),
