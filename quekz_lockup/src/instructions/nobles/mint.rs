@@ -92,7 +92,11 @@ impl<'info> MintNoble<'info> {
         Ok(())
     }
 
-    fn add_wns_royalties(&self, args: UpdateRoyaltiesArgs, signer_seeds: &[&[&[u8]]]) -> Result<()> {
+    fn add_wns_royalties(
+        &self,
+        args: UpdateRoyaltiesArgs,
+        signer_seeds: &[&[&[u8]]],
+    ) -> Result<()> {
         let cpi_accounts = AddRoyalties {
             payer: self.owner.to_account_info(),
             authority: self.nobles_authority.to_account_info(),
@@ -115,19 +119,25 @@ pub fn handler(ctx: Context<MintNoble>, name: String, symbol: String, uri: Strin
         &get_bump_in_seed_form(&ctx.bumps.nobles_authority),
     ];
     // create wns nft
-    ctx.accounts.mint_wns_nft(CreateMintAccountArgs { name, symbol, uri }, &[&signer_seeds[..]])?;
+    ctx.accounts.mint_wns_nft(
+        CreateMintAccountArgs { name, symbol, uri },
+        &[&signer_seeds[..]],
+    )?;
 
     // add wns nft to group
     ctx.accounts.add_wns_nft_member(&[&signer_seeds[..]])?;
 
     // add wns nft royalties
-    ctx.accounts.add_wns_royalties(UpdateRoyaltiesArgs {
-        royalty_basis_points: 500,
-        creators: vec![CreatorWithShare {
-            address: Pubkey::default(),
-            share: 100,
-        }],
-    }, &[&signer_seeds[..]])?;
+    ctx.accounts.add_wns_royalties(
+        UpdateRoyaltiesArgs {
+            royalty_basis_points: 500,
+            creators: vec![CreatorWithShare {
+                address: Pubkey::default(),
+                share: 100,
+            }],
+        },
+        &[&signer_seeds[..]],
+    )?;
 
     ctx.accounts.nobles_vault.owner = Pubkey::default();
     ctx.accounts.nobles_vault.nobles_mint = ctx.accounts.wns_nft_mint.key();

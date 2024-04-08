@@ -7,8 +7,9 @@ use anchor_spl::{
 use solana_program::pubkey;
 use wen_new_standard::{
     cpi::{accounts::ApproveTransfer, approve_transfer},
+    get_bump_in_seed_form,
     program::WenNewStandard,
-    get_bump_in_seed_form, TokenGroupMember,
+    TokenGroupMember,
 };
 
 use crate::{NoblesVault, QUEKZ_DEPOSIT_LIMIT};
@@ -105,8 +106,7 @@ pub fn handler(ctx: Context<UnlockVault>) -> Result<()> {
         &get_bump_in_seed_form(&ctx.bumps.nobles_vault),
     ];
     ctx.accounts.approve_transfer(&[&signer_seeds[..]])?;
-    ctx.accounts
-        .transfer_nft_to_owner( &[&signer_seeds[..]])?;
+    ctx.accounts.transfer_nft_to_owner(&[&signer_seeds[..]])?;
     ctx.accounts.nobles_vault.is_locked = true;
     Ok(())
 }

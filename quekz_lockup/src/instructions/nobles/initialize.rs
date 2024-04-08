@@ -65,7 +65,8 @@ impl<'info> InitializeNobles<'info> {
     }
 }
 
-pub fn handler(ctx: Context<InitializeNobles>,
+pub fn handler(
+    ctx: Context<InitializeNobles>,
     name: String,
     symbol: String,
     uri: String,
@@ -80,7 +81,14 @@ pub fn handler(ctx: Context<InitializeNobles>,
         wns_group.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.nobles_authority),
     ];
-    ctx.accounts
-        .create_wns_collection(CreateGroupAccountArgs { name, symbol, uri, max_size }, &[&signer_seeds[..]])?;
+    ctx.accounts.create_wns_collection(
+        CreateGroupAccountArgs {
+            name,
+            symbol,
+            uri,
+            max_size,
+        },
+        &[&signer_seeds[..]],
+    )?;
     Ok(())
 }

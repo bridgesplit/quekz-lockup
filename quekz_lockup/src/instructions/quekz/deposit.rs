@@ -1,8 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
-    associated_token::AssociatedToken, token_2022::{self, transfer_checked, TransferChecked}, token_interface::{
-        Mint, Token2022, TokenAccount,
-    }
+    associated_token::AssociatedToken,
+    token_2022::spl_token_2022,
+    token_interface::{Mint, Token2022, TokenAccount},
 };
 use solana_program::pubkey;
 use wen_new_standard::{
@@ -92,16 +92,29 @@ impl DepositQuekz<'_> {
         approve_transfer(cpi_ctx, 0)
     }
     fn transfer_quekz_to_vault(&self) -> Result<()> {
-        let cpi_program = self.token_program.to_account_info();
-        let cpi_accounts = TransferChecked {
-            from: self.owner_quekz_ta.to_account_info(),
-            mint: self.quekz_mint.to_account_info(),
-            to: self.vault_quekz_ta.to_account_info(),
-            authority: self.owner.to_account_info(),
-        };
-        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts).with_remaining_accounts(vec![self.extra_metas_account.to_account_info(), self.wns_program.to_account_info()]);
-
-        transfer_checked(cpi_ctx, 1, 0)
+        let ix = spl_token_2022::instruction::transfer_checked(
+            &self.token_program.key.key(),
+            &self.owner_quekz_ta.key(),
+            &self.quekz_mint.key(),
+            &self.vault_quekz_ta.key(),
+            &self.owner.key(),
+            &[],
+            1, // amount = 1
+            0, // 0 decimals
+        )?;
+        solana_program::program::invoke_signed(
+            &ix,
+            &[
+                self.owner_quekz_ta.to_account_info(),
+                self.quekz_mint.to_account_info(),
+                self.vault_quekz_ta.to_account_info(),
+                self.owner.to_account_info(),
+                self.extra_metas_account.to_account_info(),
+                self.wns_program.to_account_info(),
+            ],
+            &[],
+        )
+        .map_err(Into::into)
     }
 }
 

@@ -2,13 +2,14 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{Mint, TokenAccount},
-    token_2022::{transfer_checked, Token2022, TransferChecked},
+    token_2022::{spl_token_2022, Token2022},
 };
 use solana_program::pubkey;
 use wen_new_standard::{
     cpi::{accounts::ApproveTransfer, approve_transfer},
+    get_bump_in_seed_form,
     program::WenNewStandard,
-    get_bump_in_seed_form, TokenGroupMember,
+    TokenGroupMember,
 };
 
 use crate::{NoblesVault, QUEKZ_GROUP};
@@ -51,6 +52,9 @@ pub struct WithdrawQuekz<'info> {
         associated_token::authority = nobles_vault,
     )]
     pub vault_quekz_ta: Account<'info, TokenAccount>,
+    #[account(mut)]
+    /// CHECK: cpi checks
+    pub extra_metas_account: UncheckedAccount<'info>,
     /// CHECKS: cpi checks
     #[account(mut)]
     pub approve_account: UncheckedAccount<'info>,
@@ -89,16 +93,31 @@ impl WithdrawQuekz<'_> {
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         approve_transfer(cpi_ctx, 0)
     }
+
     fn transfer_quekz_to_owner(&self, signer_seeds: &[&[&[u8]]]) -> Result<()> {
-        let cpi_program = self.token_program.to_account_info();
-        let cpi_accounts = TransferChecked {
-            from: self.vault_quekz_ta.to_account_info(),
-            mint: self.quekz_mint.to_account_info(),
-            to: self.owner_quekz_ta.to_account_info(),
-            authority: self.owner.to_account_info(),
-        };
-        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-        transfer_checked(cpi_ctx, 1, 0)
+        let ix = spl_token_2022::instruction::transfer_checked(
+            &self.token_program.key.key(),
+            &self.vault_quekz_ta.key(),
+            &self.quekz_mint.key(),
+            &self.owner_quekz_ta.key(),
+            &self.nobles_vault.key(),
+            &[],
+            1, // amount = 1
+            0, // 0 decimals
+        )?;
+        solana_program::program::invoke_signed(
+            &ix,
+            &[
+                self.vault_quekz_ta.to_account_info(),
+                self.quekz_mint.to_account_info(),
+                self.owner_quekz_ta.to_account_info(),
+                self.nobles_vault.to_account_info(),
+                self.extra_metas_account.to_account_info(),
+                self.wns_program.to_account_info(),
+            ],
+            signer_seeds,
+        )
+        .map_err(Into::into)
     }
 }
 
@@ -108,8 +127,7 @@ pub fn handler(ctx: Context<WithdrawQuekz>) -> Result<()> {
         &get_bump_in_seed_form(&ctx.bumps.nobles_vault),
     ];
     ctx.accounts.approve_transfer(&[&signer_seeds[..]])?;
-    ctx.accounts
-        .transfer_quekz_to_owner(&[&signer_seeds[..]])?;
+    ctx.accounts.transfer_quekz_to_owner(&[&signer_seeds[..]])?;
     ctx.accounts.nobles_vault.quekz_deposited += 1;
     Ok(())
 }
