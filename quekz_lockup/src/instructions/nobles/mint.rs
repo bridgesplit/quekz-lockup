@@ -120,7 +120,7 @@ pub fn handler(ctx: Context<MintNoble>, name: String, symbol: String, uri: Strin
     ];
     // create wns nft
     ctx.accounts.mint_wns_nft(
-        CreateMintAccountArgs { name, symbol, uri },
+        CreateMintAccountArgs { name, symbol, uri, permanent_delegate: None, },
         &[&signer_seeds[..]],
     )?;
 

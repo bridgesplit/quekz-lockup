@@ -16,6 +16,7 @@ no-entrypoint = []
 no-idl = []
 cpi = ["no-entrypoint"]
 default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
 [dependencies]
 anchor-lang = { git = "https://github.com/bridgesplit/anchor.git", features = ["interface-instructions", "init-if-needed"] }
@@ -23,5 +24,5 @@ anchor-spl = { git = "https://github.com/bridgesplit/anchor.git", features = ["t
 spl-transfer-hook-interface = { version = "0.5.0" } 
 spl-tlv-account-resolution = "0.4.0"
 spl-pod = "0.1.0"
-wen_new_standard = { git = "https://github.com/wen-community/wen-new-standard", features = ["cpi"] }
-solana-program = "1.17.24"
+wen_new_standard = { path = "../../wen-new-standard/programs/wen_new_standard", features = ["cpi"] }
+solana-program = "1.18.10"
