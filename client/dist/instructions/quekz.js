@@ -16,6 +16,7 @@ const utils_1 = require("../utils");
 const getDepositQuekz = (provider, args) => __awaiter(void 0, void 0, void 0, function* () {
     const lockupProgram = (0, utils_1.getLockupProgram)(provider);
     const quekzMember = (0, utils_1.getMemberAccountPda)(args.quekzMint);
+    const extraMetasAccount = (0, utils_1.getExtraMetasAccountPda)(args.quekzMint);
     const ix = yield lockupProgram.methods
         .depositQuekz()
         .accountsStrict({
@@ -25,6 +26,7 @@ const getDepositQuekz = (provider, args) => __awaiter(void 0, void 0, void 0, fu
         owner: args.owner,
         noblesVault: args.noblesVault,
         quekzMember,
+        extraMetasAccount,
         quekzMint: args.quekzMint,
         ownerQuekzTa: (0, utils_1.getAtaAddress)(args.quekzMint, args.owner),
         vaultQuekzTa: (0, utils_1.getAtaAddress)(args.quekzMint, args.noblesVault),

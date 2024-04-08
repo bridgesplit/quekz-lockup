@@ -1,6 +1,6 @@
 {
     "name": "@wen-foundation/quekz-lockup",
-    "version": "0.0.2-alpha",
+    "version": "0.0.3-alpha",
     "description": "Quekz Lockup SDK",
     "homepage": "https://github.com/wen-foundation/wen-migration#readme",
     "main": "dist/index",

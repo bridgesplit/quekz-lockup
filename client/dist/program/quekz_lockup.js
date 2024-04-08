@@ -94,7 +94,7 @@ exports.IDL = {
             "accounts": [
                 {
                     "name": "owner",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": true
                 },
                 {
@@ -119,22 +119,22 @@ exports.IDL = {
                 },
                 {
                     "name": "wnsNftMint",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": true
                 },
                 {
                     "name": "wnsNftToken",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": false
                 },
                 {
                     "name": "wnsNftMemberAccount",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": false
                 },
                 {
                     "name": "extraMetasAccount",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": false
                 },
                 {
@@ -216,6 +216,11 @@ exports.IDL = {
                 },
                 {
                     "name": "vaultQuekzTa",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "extraMetasAccount",
                     "isMut": true,
                     "isSigner": false
                 },

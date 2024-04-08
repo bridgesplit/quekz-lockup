@@ -99,11 +99,8 @@ impl DepositQuekz<'_> {
             to: self.vault_quekz_ta.to_account_info(),
             authority: self.owner.to_account_info(),
         };
-        let mut remaining_accounts: &mut Vec<AccountInfo<'info>> = &mut Vec::new();
-        remaining_accounts.push(self.extra_metas_account.to_account_info());
-        remaining_accounts.push(self.approve_account.to_account_info());
-        let cpi_ctx = &mut CpiContext::new(cpi_program, cpi_accounts);
-        cpi_ctx.remaining_accounts.append(remaining_accounts);
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts).with_remaining_accounts(vec![self.extra_metas_account.to_account_info(), self.approve_account.to_account_info(), self.wns_program.to_account_info()]);
+
         transfer_checked(cpi_ctx, 1, 0)
     }
 }

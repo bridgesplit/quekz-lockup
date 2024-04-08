@@ -5,6 +5,7 @@ use wen_new_standard::{
         accounts::{AddGroup, AddRoyalties, CreateMintAccount},
         add_mint_to_group, add_royalties, create_mint_account,
     },
+    get_bump_in_seed_form,
     program::WenNewStandard,
     CreateMintAccountArgs, CreatorWithShare, UpdateRoyaltiesArgs,
 };

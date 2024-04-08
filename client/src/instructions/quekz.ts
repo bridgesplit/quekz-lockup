@@ -6,7 +6,7 @@ import {type Provider} from '@coral-xyz/anchor';
 import {
 	distributionProgramId,
 	getApproveAccountPda,
-	getAtaAddress, getDistributionAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
+	getAtaAddress, getDistributionAccountPda, getExtraMetasAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
 	quekzGroupMint,
 	tokenProgramId,
 	wnsProgramId,
@@ -21,6 +21,7 @@ export type DepositOrWithdrawQuekzArgs = {
 export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
 	const quekzMember = getMemberAccountPda(args.quekzMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.depositQuekz()
 		.accountsStrict({
@@ -30,6 +31,7 @@ export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdra
 			owner: args.owner,
 			noblesVault: args.noblesVault,
 			quekzMember,
+			extraMetasAccount,
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),

@@ -91,7 +91,7 @@ export type QuekzLockup = {
             "accounts": [
                 {
                     "name": "owner";
-                    "isMut": false;
+                    "isMut": true;
                     "isSigner": true;
                 },
                 {
@@ -116,22 +116,22 @@ export type QuekzLockup = {
                 },
                 {
                     "name": "wnsNftMint";
-                    "isMut": false;
+                    "isMut": true;
                     "isSigner": true;
                 },
                 {
                     "name": "wnsNftToken";
-                    "isMut": false;
+                    "isMut": true;
                     "isSigner": false;
                 },
                 {
                     "name": "wnsNftMemberAccount";
-                    "isMut": false;
+                    "isMut": true;
                     "isSigner": false;
                 },
                 {
                     "name": "extraMetasAccount";
-                    "isMut": false;
+                    "isMut": true;
                     "isSigner": false;
                 },
                 {
@@ -213,6 +213,11 @@ export type QuekzLockup = {
                 },
                 {
                     "name": "vaultQuekzTa";
+                    "isMut": true;
+                    "isSigner": false;
+                },
+                {
+                    "name": "extraMetasAccount";
                     "isMut": true;
                     "isSigner": false;
                 },
