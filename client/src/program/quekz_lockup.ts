@@ -21,12 +21,12 @@ export type QuekzLockup = {
         {
           "name": "wnsGroup",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "wnsGroupMint",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "wnsGroupMintTokenAccount",
@@ -66,10 +66,20 @@ export type QuekzLockup = {
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": "wen_new_standard::CreateGroupAccountArgs"
-          }
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": "string"
+        },
+        {
+          "name": "maxSize",
+          "type": "u32"
         }
       ]
     },
@@ -107,7 +117,7 @@ export type QuekzLockup = {
         {
           "name": "wnsNftMint",
           "isMut": false,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "wnsNftToken",
@@ -157,10 +167,16 @@ export type QuekzLockup = {
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": "wen_new_standard::CreateMintAccountArgs"
-          }
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": "string"
         }
       ]
     },
@@ -229,10 +245,12 @@ export type QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -307,10 +325,12 @@ export type QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -339,7 +359,12 @@ export type QuekzLockup = {
         {
           "name": "noblesVault",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
+        },
+        {
+          "name": "wnsGroup",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -419,10 +444,12 @@ export type QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -497,10 +524,12 @@ export type QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -624,12 +653,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "wnsGroup",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "wnsGroupMint",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "wnsGroupMintTokenAccount",
@@ -669,10 +698,20 @@ export const IDL: QuekzLockup = {
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": "wen_new_standard::CreateGroupAccountArgs"
-          }
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": "string"
+        },
+        {
+          "name": "maxSize",
+          "type": "u32"
         }
       ]
     },
@@ -710,7 +749,7 @@ export const IDL: QuekzLockup = {
         {
           "name": "wnsNftMint",
           "isMut": false,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "wnsNftToken",
@@ -760,10 +799,16 @@ export const IDL: QuekzLockup = {
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": "wen_new_standard::CreateMintAccountArgs"
-          }
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "uri",
+          "type": "string"
         }
       ]
     },
@@ -832,10 +877,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -910,10 +957,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -942,7 +991,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "noblesVault",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
+        },
+        {
+          "name": "wnsGroup",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -1022,10 +1076,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",
@@ -1100,10 +1156,12 @@ export const IDL: QuekzLockup = {
         {
           "name": "distributionProgram",
           "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "CHECKS: cpi checks"
-          ]
+          "isSigner": false
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "associatedTokenProgram",

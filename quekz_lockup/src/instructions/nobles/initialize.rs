@@ -16,7 +16,7 @@ pub struct InitializeNobles<'info> {
     pub collection_authority: Signer<'info>,
     #[account(
         init,
-        space = 8,
+        space = 8 + NoblesAuthority::INIT_SPACE,
         payer = collection_authority,
         seeds = [wns_group.key().as_ref()],
         bump,
@@ -24,10 +24,10 @@ pub struct InitializeNobles<'info> {
     pub nobles_authority: Box<Account<'info, NoblesAuthority>>,
     /// CHECK: cpi checks
     #[account(mut)]
-    pub wns_group: Signer<'info>,
+    pub wns_group: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK: cpi checks
-    pub wns_group_mint: UncheckedAccount<'info>,
+    pub wns_group_mint: Signer<'info>,
     #[account(mut)]
     /// CHECK: cpi checks
     pub wns_group_mint_token_account: UncheckedAccount<'info>,
@@ -65,15 +65,22 @@ impl<'info> InitializeNobles<'info> {
     }
 }
 
-pub fn handler(ctx: Context<InitializeNobles>, args: CreateGroupAccountArgs) -> Result<()> {
-    ctx.accounts.nobles_authority.authority = ctx.accounts.collection_authority.key();
-    ctx.accounts.nobles_authority.group = ctx.accounts.wns_group.key();
+pub fn handler(ctx: Context<InitializeNobles>,
+    name: String,
+    symbol: String,
+    uri: String,
+    max_size: u32,
+) -> Result<()> {
+    let nobles_authority = &mut ctx.accounts.nobles_authority;
+
+    nobles_authority.authority = ctx.accounts.collection_authority.key();
+    nobles_authority.group = ctx.accounts.wns_group.key();
     let wns_group = ctx.accounts.wns_group.key();
     let signer_seeds = [
         wns_group.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.nobles_authority),
     ];
     ctx.accounts
-        .create_wns_collection(args, &[&signer_seeds[..]])?;
+        .create_wns_collection(CreateGroupAccountArgs { name, symbol, uri, max_size }, &[&signer_seeds[..]])?;
     Ok(())
 }

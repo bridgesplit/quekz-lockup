@@ -10,7 +10,7 @@ pub use errors::*;
 pub use instructions::*;
 pub use state::*;
 
-declare_id!("diste3nXmK7ddDTs1zb6uday6j4etCa9RChD8fJ1xay");
+declare_id!("quekrjyc8AmUPcXRsgyuyBhe8d4ncDKsg8DZJWYjHRt");
 
 #[program]
 pub mod quekz_lockup {
@@ -20,17 +20,22 @@ pub mod quekz_lockup {
     /// initialize nobles
     pub fn initialize_nobles(
         ctx: Context<InitializeNobles>,
-        args: wen_new_standard::CreateGroupAccountArgs,
+        name: String,
+        symbol: String,
+        uri: String,
+        max_size: u32,
     ) -> Result<()> {
-        instructions::nobles::initialize::handler(ctx, args)
+        instructions::nobles::initialize::handler(ctx, name, symbol, uri, max_size)
     }
 
     /// mint noble
     pub fn mint_noble(
         ctx: Context<MintNoble>,
-        args: wen_new_standard::CreateMintAccountArgs,
+        name: String,
+        symbol: String,
+        uri: String,
     ) -> Result<()> {
-        instructions::nobles::mint::handler(ctx, args)
+        instructions::nobles::mint::handler(ctx, name, symbol, uri)
     }
 
     /// deposit quekz

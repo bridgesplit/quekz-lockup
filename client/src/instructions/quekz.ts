@@ -1,12 +1,13 @@
 import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
-import {Keypair, SYSVAR_RENT_PUBKEY, SystemProgram} from '@solana/web3.js';
+import {
+	Keypair, PublicKey, SYSVAR_RENT_PUBKEY, SystemProgram,
+} from '@solana/web3.js';
 import {type Provider} from '@coral-xyz/anchor';
 import {
 	distributionProgramId,
 	getApproveAccountPda,
 	getAtaAddress, getDistributionAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
-	getNoblesVault,
-	quekzGroup,
+	quekzGroupMint,
 	tokenProgramId,
 	wnsProgramId,
 } from '../utils';
@@ -19,7 +20,6 @@ export type DepositOrWithdrawQuekzArgs = {
 
 export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const groupMint = new Keypair();
 	const quekzMember = getMemberAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.depositQuekz()
@@ -34,17 +34,16 @@ export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdra
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
 			approveAccount: getApproveAccountPda(args.quekzMint),
-			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionAccount: getDistributionAccountPda(quekzGroupMint.toString(), PublicKey.default.toString()),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
-		.signers([groupMint])
 		.instruction();
 	return ix;
 };
 
 export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const groupMint = new Keypair();
 	const quekzMember = getMemberAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.withdrawQuekz()
@@ -59,10 +58,10 @@ export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdr
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
 			approveAccount: getApproveAccountPda(args.quekzMint),
-			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroupMint.toString()),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
-		.signers([groupMint])
 		.instruction();
 	return ix;
 };

@@ -1,9 +1,10 @@
 use anchor_lang::prelude::*;
 use solana_program::pubkey;
 
-pub const QUEKZ_GROUP: Pubkey = pubkey!("dqci6TGXWGTki8DTQ1QcJ3qg4fPbxUzj6MwJBGjuhHX");
+pub const QUEKZ_GROUP: Pubkey = pubkey!("6Fthdcd6VQCJcSRAYTps4cyq42Rba9Ds1ZbM6Y2gyeX7");
 
 #[account()]
+#[derive(InitSpace)]
 /// empty struct representing nobles collection authority
 pub struct NoblesAuthority {
     pub authority: Pubkey,
@@ -13,6 +14,7 @@ pub struct NoblesAuthority {
 pub const QUEKZ_DEPOSIT_LIMIT: u8 = 10;
 
 #[account()]
+#[derive(InitSpace)]
 pub struct NoblesVault {
     /// nonce
     pub nonce: Pubkey,

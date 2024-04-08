@@ -7,6 +7,7 @@ import {
 	getAtaAddress, getDistributionAccountPda, getLockupProgram, getMemberAccountPda, getNoblesAuthority,
 	getNoblesVault,
 	tokenProgramId,
+	wnsProgramId,
 } from '../utils';
 
 export const getInitializeVault = async (provider: Provider, owner: string, group: string) => {
@@ -19,6 +20,7 @@ export const getInitializeVault = async (provider: Provider, owner: string, grou
 			noblesAuthority,
 			systemProgram: SystemProgram.programId,
 			owner,
+			wnsGroup: group,
 			noblesVault: getNoblesVault(nonce.toString()),
 		})
 		.instruction();
@@ -50,6 +52,7 @@ export const getLockVault = async (provider: Provider, args: LockOrUnlockVaultAr
 			approveAccount: getApproveAccountPda(args.noblesMint),
 			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
 		.instruction();
 	return ix;
@@ -73,6 +76,7 @@ export const getUnlockVault = async (provider: Provider, args: LockOrUnlockVault
 			approveAccount: getApproveAccountPda(args.noblesMint),
 			distributionAccount: getDistributionAccountPda(args.noblesMint, args.noblesGroup),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
 		.instruction();
 	return ix;

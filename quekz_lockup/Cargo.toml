@@ -9,7 +9,7 @@ tags = ["wns", "alpha", "solana", "token_extensions"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "wen_migration"
+name = "quekz_lockup"
 
 [features]
 no-entrypoint = []

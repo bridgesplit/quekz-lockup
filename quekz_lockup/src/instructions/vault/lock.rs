@@ -7,6 +7,7 @@ use anchor_spl::{
 use solana_program::pubkey;
 use wen_new_standard::{
     cpi::{accounts::ApproveTransfer, approve_transfer},
+    program::WenNewStandard,
     TokenGroupMember,
 };
 
@@ -57,24 +58,25 @@ pub struct LockVault<'info> {
     pub system_program: Program<'info, System>,
     #[account(
         executable,
-        constraint = distribution_program.key() == pubkey!("wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM")
+        constraint = distribution_program.key() == pubkey!("diste3nXmK7ddDTs1zb6uday6j4etCa9RChD8fJ1xay")
     )]
-    /// CHECKS: cpi checks
+    /// CHECK: Constraint check on key
     pub distribution_program: UncheckedAccount<'info>,
+    pub wns_program: Program<'info, WenNewStandard>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
 impl LockVault<'_> {
     fn approve_transfer(&self) -> Result<()> {
-        let cpi_program = self.token_program.to_account_info();
+        let cpi_program = self.wns_program.to_account_info();
         let cpi_accounts = ApproveTransfer {
             payer: self.owner.to_account_info(),
             authority: self.owner.to_account_info(),
             mint: self.nobles_mint.to_account_info(),
             approve_account: self.approve_account.to_account_info(),
-            payment_mint: self.nobles_mint.to_account_info(), //  wont be used
-            distribution_token_account: self.nobles_mint.to_account_info(), // wont be used
-            authority_token_account: self.nobles_mint.to_account_info(), // wont be used
+            payment_mint: self.system_program.to_account_info(), //  wont be used
+            distribution_token_account: self.nobles_vault.to_account_info(), // wont be used
+            authority_token_account: self.owner.to_account_info(), // wont be used
             distribution_account: self.distribution_account.to_account_info(),
             system_program: self.system_program.to_account_info(),
             distribution_program: self.distribution_program.to_account_info(),
@@ -85,7 +87,7 @@ impl LockVault<'_> {
         approve_transfer(cpi_ctx, 0)
     }
 
-    fn transfer_nft_to_vault(&self, amount: u64) -> Result<()> {
+    fn transfer_nft_to_vault(&self) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
             from: self.owner_noble_ta.to_account_info(),
@@ -94,13 +96,13 @@ impl LockVault<'_> {
             authority: self.owner.to_account_info(),
         };
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
-        transfer_checked(cpi_ctx, amount, self.nobles_mint.decimals)
+        transfer_checked(cpi_ctx, 1, 0)
     }
 }
 
 pub fn handler(ctx: Context<LockVault>) -> Result<()> {
     ctx.accounts.approve_transfer()?;
-    ctx.accounts.transfer_nft_to_vault(1)?;
+    ctx.accounts.transfer_nft_to_vault()?;
     ctx.accounts.nobles_vault.is_locked = true;
     Ok(())
 }

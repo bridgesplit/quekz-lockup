@@ -18,7 +18,7 @@ export const getProvider = () => {
 
 export const getLockupProgram = (provider: Provider) => new Program(
 	quekzLockupIdl as Idl,
-	wnsProgramId,
+	lockupProgramId,
 	provider,
 ) as unknown as Program<QuekzLockup>;
 

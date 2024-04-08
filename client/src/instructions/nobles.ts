@@ -1,9 +1,10 @@
 import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
-import {Keypair, SYSVAR_RENT_PUBKEY, SystemProgram} from '@solana/web3.js';
+import {
+	Keypair, PublicKey, SYSVAR_RENT_PUBKEY, SystemProgram,
+} from '@solana/web3.js';
 import {type Provider} from '@coral-xyz/anchor';
 import {
 	getAtaAddress, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
-	getNoblesVault,
 	tokenProgramId,
 	wnsProgramId,
 } from '../utils';
@@ -14,34 +15,34 @@ export type CreateGroupArgs = {
 	uri: string;
 	maxSize: number;
 	collectionAuthority: string;
+	groupNft: string;
 };
 
 export const getInitializeNobles = async (provider: Provider, args: CreateGroupArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const groupMint = new Keypair();
-	const group = getGroupAccountPda(groupMint.publicKey.toString());
+	const {groupNft} = args;
+	const group = getGroupAccountPda(groupNft);
 	const noblesAuthorityPda = getNoblesAuthority(group.toString());
 	const ix = await lockupProgram.methods
-		.initializeNobles({
-			name: args.name,
-			symbol: args.symbol,
-			uri: args.uri,
-			maxSize: args.maxSize,
-		})
+		.initializeNobles(
+			args.name,
+			args.symbol,
+			args.uri,
+			args.maxSize,
+		)
 		.accountsStrict({
 			systemProgram: SystemProgram.programId,
 			rent: SYSVAR_RENT_PUBKEY,
 			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-			wnsGroupMint: groupMint.publicKey,
+			wnsGroupMint: groupNft,
 			collectionAuthority: args.collectionAuthority,
 			noblesAuthority: noblesAuthorityPda,
 			wnsGroup: group,
-			wnsGroupMintTokenAccount: getAtaAddress(groupMint.publicKey.toString(), args.collectionAuthority),
+			wnsGroupMintTokenAccount: getAtaAddress(groupNft, args.collectionAuthority),
 			wnsManager: getManagerAccountPda(),
 			tokenProgram: tokenProgramId,
 			wnsProgram: wnsProgramId,
 		})
-		.signers([groupMint])
 		.instruction();
 	return ix;
 };
@@ -52,21 +53,18 @@ export type MintNoblesArgs = {
 	uri: string;
 	owner: string;
 	group: string;
+	vault: string;
+	nobleMint: string;
 };
 
 export const getMintNobles = async (provider: Provider, args: MintNoblesArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const nftMint = new Keypair();
-	const member = getMemberAccountPda(nftMint.publicKey.toString());
+	const {nobleMint} = args;
+	const member = getMemberAccountPda(nobleMint);
 	const noblesAuthorityPda = getNoblesAuthority(args.group.toString());
-	const nonce = new Keypair().publicKey;
-	const noblesVault = getNoblesVault(nonce.toString());
+	const noblesVault = new PublicKey(args.vault);
 	const ix = await lockupProgram.methods
-		.mintNoble({
-			name: args.name,
-			symbol: args.symbol,
-			uri: args.uri,
-		})
+		.mintNoble(args.name, args.symbol, args.uri)
 		.accountsStrict({
 			systemProgram: SystemProgram.programId,
 			rent: SYSVAR_RENT_PUBKEY,
@@ -78,13 +76,12 @@ export const getMintNobles = async (provider: Provider, args: MintNoblesArgs) =>
 			wnsProgram: wnsProgramId,
 			owner: args.owner,
 			noblesVault,
-			wnsNftMint: nftMint.publicKey,
-			wnsNftToken: getAtaAddress(nftMint.publicKey.toString(), args.owner),
+			wnsNftMint: nobleMint,
+			wnsNftToken: getAtaAddress(nobleMint, args.owner),
 			wnsNftMemberAccount: member,
-			extraMetasAccount: getMemberAccountPda(nftMint.publicKey.toString()),
+			extraMetasAccount: getMemberAccountPda(nobleMint),
 			tokenProgram2022: tokenProgramId,
 		})
-		.signers([nftMint])
 		.instruction();
 	return ix;
 };
