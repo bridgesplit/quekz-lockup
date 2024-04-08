@@ -118,8 +118,6 @@ impl WithdrawQuekz<'_> {
                 self.quekz_mint.to_account_info(),
                 self.owner_quekz_ta.to_account_info(),
                 self.nobles_vault.to_account_info(),
-                self.extra_metas_account.to_account_info(),
-                self.wns_program.to_account_info(),
             ],
             signer_seeds,
         )
