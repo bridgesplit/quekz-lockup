@@ -64,7 +64,7 @@ pub struct LockVault<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-impl LockVault<'_> {
+impl<'info> LockVault<'info> {
     fn approve_transfer(&self) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = ApproveTransfer {
@@ -85,7 +85,7 @@ impl LockVault<'_> {
         approve_transfer(cpi_ctx, 0)
     }
 
-    fn transfer_nft_to_vault(&self, amount: u64) -> Result<()> {
+    fn transfer_nft_to_vault(&self, ra: Vec<AccountInfo<'info>>, amount: u64) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
             from: self.owner_noble_ta.to_account_info(),
@@ -93,14 +93,15 @@ impl LockVault<'_> {
             to: self.vault_noble_ta.to_account_info(),
             authority: self.owner.to_account_info(),
         };
-        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts).with_remaining_accounts(ra);
         transfer_checked(cpi_ctx, amount, self.nobles_mint.decimals)
     }
 }
 
-pub fn handler(ctx: Context<LockVault>) -> Result<()> {
+pub fn handler<'info>(ctx: Context<'_, '_, '_, 'info, LockVault<'info>>) -> Result<()> {
     ctx.accounts.approve_transfer()?;
-    ctx.accounts.transfer_nft_to_vault(1)?;
+    ctx.accounts
+        .transfer_nft_to_vault(ctx.remaining_accounts.to_vec(), 1)?;
     ctx.accounts.nobles_vault.is_locked = true;
     Ok(())
 }

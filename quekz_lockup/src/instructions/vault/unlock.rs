@@ -64,7 +64,7 @@ pub struct UnlockVault<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-impl UnlockVault<'_> {
+impl<'info> UnlockVault<'info> {
     fn approve_transfer(&self, signer_seeds: &[&[&[u8]]]) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = ApproveTransfer {
@@ -84,7 +84,12 @@ impl UnlockVault<'_> {
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         approve_transfer(cpi_ctx, 0)
     }
-    fn transfer_nft_to_owner(&self, amount: u64, signer_seeds: &[&[&[u8]]]) -> Result<()> {
+    fn transfer_nft_to_owner(
+        &self,
+        ra: Vec<AccountInfo<'info>>,
+        amount: u64,
+        signer_seeds: &[&[&[u8]]],
+    ) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
             from: self.vault_noble_ta.to_account_info(),
@@ -97,14 +102,14 @@ impl UnlockVault<'_> {
     }
 }
 
-pub fn handler(ctx: Context<UnlockVault>) -> Result<()> {
+pub fn handler<'info>(ctx: Context<'_, '_, '_, 'info, UnlockVault<'info>>) -> Result<()> {
     let signer_seeds = [
         ctx.accounts.nobles_vault.nonce.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.nobles_vault),
     ];
     ctx.accounts.approve_transfer(&[&signer_seeds[..]])?;
     ctx.accounts
-        .transfer_nft_to_owner(1, &[&signer_seeds[..]])?;
+        .transfer_nft_to_owner(ctx.remaining_accounts.to_vec(), 1, &[&signer_seeds[..]])?;
     ctx.accounts.nobles_vault.is_locked = true;
     Ok(())
 }

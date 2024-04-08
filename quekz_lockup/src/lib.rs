@@ -49,12 +49,12 @@ pub mod quekz_lockup {
     }
 
     /// lock noble
-    pub fn lock_noble(ctx: Context<LockVault>) -> Result<()> {
+    pub fn lock_noble<'info>(ctx: Context<'_, '_, '_, 'info, LockVault<'info>>) -> Result<()> {
         instructions::vault::lock::handler(ctx)
     }
 
     /// unlock noble
-    pub fn unlock_noble(ctx: Context<UnlockVault>) -> Result<()> {
+    pub fn unlock_noble<'info>(ctx: Context<'_, '_, '_, 'info, UnlockVault<'info>>) -> Result<()> {
         instructions::vault::unlock::handler(ctx)
     }
 }
