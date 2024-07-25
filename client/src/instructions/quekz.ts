@@ -1,12 +1,13 @@
 import {ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
-import {Keypair, SYSVAR_RENT_PUBKEY, SystemProgram} from '@solana/web3.js';
+import {
+	PublicKey, SystemProgram,
+} from '@solana/web3.js';
 import {type Provider} from '@coral-xyz/anchor';
 import {
 	distributionProgramId,
 	getApproveAccountPda,
-	getAtaAddress, getDistributionAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
-	getNoblesVault,
-	quekzGroup,
+	getAtaAddress, getDistributionAccountPda, getExtraMetasAccountPda, getGroupAccountPda, getLockupProgram, getManagerAccountPda, getMemberAccountPda, getNoblesAuthority,
+	quekzGroupMint,
 	tokenProgramId,
 	wnsProgramId,
 } from '../utils';
@@ -19,8 +20,8 @@ export type DepositOrWithdrawQuekzArgs = {
 
 export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const groupMint = new Keypair();
 	const quekzMember = getMemberAccountPda(args.quekzMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.depositQuekz()
 		.accountsStrict({
@@ -30,22 +31,23 @@ export const getDepositQuekz = async (provider: Provider, args: DepositOrWithdra
 			owner: args.owner,
 			noblesVault: args.noblesVault,
 			quekzMember,
+			extraMetasAccount,
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
 			approveAccount: getApproveAccountPda(args.quekzMint),
-			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionAccount: getDistributionAccountPda(quekzGroupMint.toString(), PublicKey.default.toString()),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
-		.signers([groupMint])
 		.instruction();
 	return ix;
 };
 
 export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdrawQuekzArgs) => {
 	const lockupProgram = getLockupProgram(provider);
-	const groupMint = new Keypair();
 	const quekzMember = getMemberAccountPda(args.quekzMint);
+	const extraMetasAccount = getExtraMetasAccountPda(args.quekzMint);
 	const ix = await lockupProgram.methods
 		.withdrawQuekz()
 		.accountsStrict({
@@ -58,11 +60,12 @@ export const getWithdrawQuekz = async (provider: Provider, args: DepositOrWithdr
 			quekzMint: args.quekzMint,
 			ownerQuekzTa: getAtaAddress(args.quekzMint, args.owner),
 			vaultQuekzTa: getAtaAddress(args.quekzMint, args.noblesVault),
+			extraMetasAccount,
 			approveAccount: getApproveAccountPda(args.quekzMint),
-			distributionAccount: getDistributionAccountPda(args.quekzMint, quekzGroup.toString()),
+			distributionAccount: getDistributionAccountPda(quekzGroupMint.toString(), PublicKey.default.toString()),
 			distributionProgram: distributionProgramId,
+			wnsProgram: wnsProgramId,
 		})
-		.signers([groupMint])
 		.instruction();
 	return ix;
 };
